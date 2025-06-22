@@ -1,25 +1,30 @@
 # ESG: Economic Scenario Generator
 
-Welcome! This project is a lightweight, code-first implementation of an **Economic Scenario Generator (ESG)** based on correlated geometric Brownian motion. If you're interested in modeling asset prices, simulating market risk, or validating your understanding of Monte Carlo methods—this is for you.
+Welcome! This project is my own lightweight attempt at an **Economic Scenario Generator (ESG)** based on correlated geometric Brownian motion.
 
 ---
 
-## ?? What This Project Does
+## Project Scope
 
+### Current
 * Simulates realistic multi-asset price paths using **correlated log returns**
 * Calibrates to historical data using estimated drift, volatility, and correlation
 * Validates that simulations reproduce the empirical statistics accurately
 * Fully vectorized and tested on millions of paths for accuracy
 
+### Future
+* Add features that allow for time-varying volatility, such as GARCH-based models.
+* Add other asset classes to the selection.
+
 ---
 
-## ?? How It Works
+## How It Works
 
 ### Core functions (in `src/`):
 
-* `simulate_correlated_logreturns()` — simulates correlated log returns using Cholesky decomposition
-* `build_prices()` — builds asset price paths from simulated log returns
-* `get_ticker_data()` *(work in progress)* — fetches Yahoo Finance data and computes inputs
+* `simulate_correlated_logreturns()` â€” simulates correlated log returns using Cholesky decomposition
+* `build_prices()` â€” builds asset price paths from simulated log returns
+* `get_ticker_data()` *(work in progress)* â€” fetches Yahoo Finance data and computes inputs
 
 ### Validation (in `test/`):
 
@@ -30,7 +35,7 @@ Welcome! This project is a lightweight, code-first implementation of an **Econom
 
 ---
 
-## ?? Project Structure
+## Project Structure
 
 ```
 ESG/
@@ -45,7 +50,7 @@ ESG/
 
 ---
 
-## ?? Running the Simulation Test
+## Running the Simulation Test
 
 ```bash
 python test/_run_correlated_simulation.py
@@ -58,11 +63,11 @@ This script will:
 * Simulate log returns for multiple assets
 * Compare simulated stats to actual historical ones
 
-You’ll see a comparison printed to the console, with percentage differences in basis points.
+Youâ€™ll see a comparison printed to the console, with percentage differences in basis points.
 
 ---
 
-## ? Sample Output
+## Sample Output
 
 ```
 theoretical drift per step:
@@ -85,9 +90,9 @@ These results show that the simulation accurately replicates the underlying stat
 
 ---
 
-## ?? To-Do
+## To-Do
 
-Here are some ideas for what’s next:
+Here are some ideas for whatâ€™s next:
 
 * [ ] Add stochastic interest rates (e.g. CIR model)
 * [ ] Incorporate jumps (Merton or Kou)
@@ -98,10 +103,8 @@ Here are some ideas for what’s next:
 
 ---
 
-## ?? Author
+## Author
 
-Developed by **Ryan Olivier** — actuary, investment thinker, and builder of quant tools. For questions or suggestions, feel free to open an issue.
+Developed by **Ryan Olivier**. For questions or suggestions, feel free to open an issue.
 
 ---
-
-Thanks for checking it out! If you're working with markets, risk, or simulation—this project should feel like home.
