@@ -39,13 +39,13 @@ Welcome! This project is my own lightweight attempt at an **Economic Scenario Ge
 
 ```
 ESG/
-??? src/                        # Simulation engine
-?   ??? simulate.py             # Main logic
-??? test/
-?   ??? _run_correlated_simulation.py  # Validation against real data
-??? data/
-?   ??? prices-split-adjusted.csv      # Input data (from Kaggle)
-??? README.md                  # You're here
+├── src/                               # Simulation engine
+│   └── simulate.py                    # Main logic
+├── test/
+│   └── _run_correlated_simulation.py  # Validation against real data
+├── data/
+│   └── prices-split-adjusted.csv      # Input data (from Kaggle)
+├── README.md                          # You're here
 ```
 
 ---
