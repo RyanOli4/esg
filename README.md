@@ -2,6 +2,8 @@
 
 Welcome! This project is my own lightweight attempt at an **Economic Scenario Generator (ESG)** based on correlated geometric Brownian motion.
 
+![picture of sample paths](images/pic.png)
+
 ---
 
 ## Project Scope
@@ -22,9 +24,9 @@ Welcome! This project is my own lightweight attempt at an **Economic Scenario Ge
 
 ### Core functions (in `src/`):
 
-* `simulate_correlated_logreturns()` — simulates correlated log returns using Cholesky decomposition
-* `build_prices()` — builds asset price paths from simulated log returns
-* `get_ticker_data()` *(work in progress)* — fetches Yahoo Finance data and computes inputs
+* `simulate_correlated_logreturns()` � simulates correlated log returns using Cholesky decomposition
+* `build_prices()` � builds asset price paths from simulated log returns
+* `get_ticker_data()` *(work in progress)* � fetches Yahoo Finance data and computes inputs
 
 ### Validation (in `test/`):
 
@@ -39,13 +41,13 @@ Welcome! This project is my own lightweight attempt at an **Economic Scenario Ge
 
 ```
 ESG/
-├── src/                               # Simulation engine
-│   └── simulate.py                    # Main logic
-├── test/
-│   └── _run_correlated_simulation.py  # Validation against real data
-├── data/
-│   └── prices-split-adjusted.csv      # Input data (from Kaggle)
-├── README.md                          # You're here
+??? src/                               # Simulation engine
+?   ??? simulate.py                    # Main logic
+??? test/
+?   ??? _run_correlated_simulation.py  # Validation against real data
+??? data/
+?   ??? prices-split-adjusted.csv      # Input data (from Kaggle)
+??? README.md                          # You're here
 ```
 
 ---
@@ -63,7 +65,7 @@ This script will:
 * Simulate log returns for multiple assets
 * Compare simulated stats to actual historical ones
 
-You’ll see a comparison printed to the console, with percentage differences in basis points.
+You�ll see a comparison printed to the console, with percentage differences in basis points.
 
 ---
 
@@ -71,19 +73,25 @@ You’ll see a comparison printed to the console, with percentage differences in
 
 ```
 theoretical drift per step:
- [2.4e-04 1.7e-04]
+ [2.45931239e-06 1.99025920e-06]
 simulated drift per step:
- [2.39e-04 1.71e-04]
+ [2.33472987e-06 1.97560408e-06]
 % difference (mean):
- [0.12 0.58]
+ [-5.06574612 -0.73634268]
 
+theoretical ? per step:
+ [0.00104121 0.00069824]
 simulated ? per step:
- [0.0103 0.0075]
+ [0.00104171 0.00069822]
 % difference (?):
- [-0.08 0.11]
+ [ 0.04792867 -0.0025378 ]
 
+theoretical corr matrix:
+ [[1.         0.29400284]
+ [0.29400284 1.        ]]
 simulated corr matrix:
- [[1.0, 0.29], [0.29, 1.0]]
+ [[1.        0.2940269]
+ [0.2940269 1.       ]]
 ```
 
 These results show that the simulation accurately replicates the underlying statistical structure of the historical data.
@@ -92,8 +100,10 @@ These results show that the simulation accurately replicates the underlying stat
 
 ## To-Do
 
-Here are some ideas for what’s next:
+Here are some ideas for what�s next:
 
+* [ ] Rewrite in OOP format
+* [ ] Add support for dividends (currently only modelling price return)
 * [ ] Add stochastic interest rates (e.g. CIR model)
 * [ ] Incorporate jumps (Merton or Kou)
 * [ ] Support multi-frequency time steps (e.g. weekly/monthly)

@@ -47,8 +47,8 @@ log_return_data = np.delete(
 #%% 3. Parameter Calculation
 n_assets   = len(data.columns)
 dt         = 1/252          
-time_steps = 12            
-n_sims     = 2_500_000
+time_steps = 120     
+n_sims     = 1_000
 
 mu    = np.mean(log_return_data, axis=0)
 sigma = np.std(log_return_data, axis=0, ddof=1)
