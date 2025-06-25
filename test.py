@@ -28,6 +28,9 @@ import numpy as np
 import src
 import matplotlib.pyplot as plt
 import yfinance as yf
+import seaborn as sns
+import matplotlib.pyplot as plt
+
 
 #%% 1. Data Preparation
 raw_data = pd.read_csv(
@@ -35,7 +38,7 @@ raw_data = pd.read_csv(
 )
 
 data = raw_data.pivot(index="date", columns="symbol", values="close")
-data = data[['AAPL', 'COST']]
+data = data[['AAPL', 'MCD', 'GOOG']]
 
 #%% 2. Historical Log-Return Estimation
 log_return_data = np.delete(
@@ -47,15 +50,14 @@ log_return_data = np.delete(
 #%% 3. Parameter Calculation
 n_assets   = len(data.columns)
 dt         = 1/252          
-time_steps = 120     
-n_sims     = 1_000
+time_steps = 252*5
+n_sims     = 10_000
 
-mu    = np.mean(log_return_data, axis=0)
-sigma = np.std(log_return_data, axis=0, ddof=1)
+E_X    = np.mean(log_return_data, axis=0)
+SD_X = np.std(log_return_data, axis=0, ddof=1)
 
-# Theoretical per-step moments
-drift_per_step      = (mu - 0.5 * sigma**2) * dt
-volatility_per_step = sigma * np.sqrt(dt)
+sigma = SD_X / np.sqrt(dt)
+mu = E_X/dt + 0.5*sigma**2
 
 # Empirical correlation matrix of daily returns
 corr_mat = np.corrcoef(log_return_data[1:, :], rowvar=False)
@@ -74,15 +76,33 @@ sim_corr = np.corrcoef(sim_flat)
 sim_mean = sim.mean(axis=(1, 2))
 sim_std  = np.array([np.std(sim[i], ddof=1) for i in range(n_assets)])
 
+src.plot_returns(sim, n_plot = 10)
+
 #%% 6. Validation Metrics and Output
-print("theoretical drift per step:\n", drift_per_step)
-print("simulated drift per step:\n", sim_mean)
-print("% difference (drift):\n", (sim_mean / drift_per_step - 1) * 100)
+print("Empirical mean of historical log-returns (E_X):\n", E_X)
+print("Simulated mean of log-returns:\n", sim_mean)
+print("% difference (mean):\n", (sim_mean / E_X - 1) * 100)
 
-print("\ntheoretical σ per step:\n", volatility_per_step)
-print("simulated σ per step:\n", sim_std)
-print("% difference (σ):\n", (sim_std / volatility_per_step - 1) * 100)
+print("\nEmpirical std dev of historical log-returns (SD_X):\n", SD_X)
+print("Simulated std dev of log-returns:\n", sim_std)
+print("% difference (std dev):\n", (sim_std / SD_X - 1) * 100)
 
-print("\ntheoretical corr matrix:\n", corr_mat)
-print("simulated corr matrix:\n", sim_corr)
+print("\nEmpirical correlation matrix:\n", corr_mat)
+print("Simulated correlation matrix:\n", sim_corr)
 
+asset_labels = list(data.columns)
+
+fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+
+# Empirical correlation heatmap
+sns.heatmap(corr_mat, annot=True, cmap="coolwarm", xticklabels=asset_labels,
+            yticklabels=asset_labels, ax=axes[0], vmin=0, vmax=1)
+axes[0].set_title("Empirical Correlation")
+
+# Simulated correlation heatmap
+sns.heatmap(sim_corr, annot=True, cmap="coolwarm", xticklabels=asset_labels,
+            yticklabels=asset_labels, ax=axes[1], vmin=0, vmax=1)
+axes[1].set_title("Simulated Correlation")
+
+plt.tight_layout()
+plt.show()
