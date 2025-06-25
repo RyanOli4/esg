@@ -30,7 +30,7 @@ Welcome! This project is my own lightweight attempt at an **Economic Scenario Ge
 
 ### Validation (in `test/`):
 
-* Uses AAPL and COST historical returns
+* Uses 'AAPL', 'MCD', 'GOOG' for historical returns
 * Computes theoretical vs simulated drift, volatility, and correlation
 * Reports % error in basis points (bps)
 * Confirms the ESG engine is working as expected
@@ -41,13 +41,13 @@ Welcome! This project is my own lightweight attempt at an **Economic Scenario Ge
 
 ```
 ESG/
-??? src/                               # Simulation engine
-?   ??? simulate.py                    # Main logic
-??? test/
-?   ??? _run_correlated_simulation.py  # Validation against real data
-??? data/
-?   ??? prices-split-adjusted.csv      # Input data (from Kaggle)
-??? README.md                          # You're here
+--- src/                               # Simulation engine
+------ simulate.py                    # Main logic
+--- test/
+------_run_correlated_simulation.py  # Validation against real data
+--- data/
+------ prices-split-adjusted.csv      # Input data (from Kaggle)
+--- README.md                          # You're here
 ```
 
 ---
@@ -72,29 +72,32 @@ You’ll see a comparison printed to the console, with percentage differences in b
 ## Sample Output
 
 ```
-theoretical drift per step:
- [2.45931239e-06 1.99025920e-06]
-simulated drift per step:
- [2.33472987e-06 1.97560408e-06]
+Empirical mean of historical log-returns (E_X):
+ [0.00075635 0.00037597 0.00051396]
+Simulated mean of log-returns:
+ [0.00074555 0.0003705  0.00050859]
 % difference (mean):
- [-5.06574612 -0.73634268]
+ [-1.4273803  -1.45528881 -1.04579082]
 
-theoretical ? per step:
- [0.00104121 0.00069824]
-simulated ? per step:
- [0.00104171 0.00069822]
-% difference (?):
- [ 0.04792867 -0.0025378 ]
+Empirical std dev of historical log-returns (SD_X):
+ [0.01653339 0.00959149 0.01561183]
+Simulated std dev of log-returns:
+ [0.01653017 0.00959267 0.01561213]
+% difference (std dev):
+ [-0.01947327  0.01236005  0.00193448]
 
-theoretical corr matrix:
- [[1.         0.29400284]
- [0.29400284 1.        ]]
-simulated corr matrix:
- [[1.        0.2940269]
- [0.2940269 1.       ]]
-```
+Empirical correlation matrix:
+ [[1.         0.32133439 0.41353331]
+ [0.32133439 1.         0.36582982]
+ [0.41353331 0.36582982 1.        ]]
+Simulated correlation matrix:
+ [[1.         0.32109635 0.41362734]
+ [0.32109635 1.         0.36600567]
+ [0.41362734 0.36600567 1.        ]]
 
 These results show that the simulation accurately replicates the underlying statistical structure of the historical data.
+
+![picture of correlation](images/pic2.png)
 
 ---
 
@@ -104,17 +107,14 @@ Here are some ideas for what’s next:
 
 * [ ] Rewrite in OOP format
 * [ ] Add support for dividends (currently only modelling price return)
-* [ ] Add stochastic interest rates (e.g. CIR model)
+* [ ] Add stochastic volatility
 * [ ] Incorporate jumps (Merton or Kou)
-* [ ] Support multi-frequency time steps (e.g. weekly/monthly)
-* [ ] Allow regime-switching correlation structures
-* [ ] Extend `get_ticker_data()` to handle more tickers and auto-cleaning
+* [ ] Extend/fix `get_ticker_data()` 
 * [ ] Wrap simulations into a small web app for live demo or API
 
 ---
 
 ## Author
 
-Developed by **Ryan Olivier**. For questions or suggestions, feel free to open an issue.
-
+Developed by **Ryan Olivier**.
 ---
