@@ -96,6 +96,7 @@ Simulated correlation matrix:
  [0.41362734 0.36600567 1.        ]]
 
 These results show that the simulation accurately replicates the underlying statistical structure of the historical data.
+```
 
 ![picture of correlation](images/pic2.png)
 
