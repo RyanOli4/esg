@@ -97,8 +97,101 @@ Simulated correlation matrix:
 ```
 These results show that the simulation accurately replicates the underlying statistical structure of the historical data.
 
-
 ![picture of correlation](images/pic2.png)
+
+---
+
+## Usage Guide
+
+Below is a quick guide on how to calibrate and run simulations using this ESG engine.
+
+---
+
+### 1. **Calibrate the Model**
+
+Use the `GeometricBrownianMotion` class to fit drift, volatility, and correlation from historical asset prices:
+
+```python
+from src.simulate import GeometricBrownianMotion
+
+model = GeometricBrownianMotion()
+model.calibrate(
+    tickers=["AAPL", "MCD", "GOOG"],
+    start_date="2017-01-01",
+    end_date="2022-01-01",
+    frequency="1d"
+)
+```
+
+This estimates:
+- `mu`: drift vector  
+- `sigma`: volatility vector  
+- `corr_mat`: correlation matrix  
+- `dt`: time step based on frequency  
+
+---
+
+### 2. **Simulate Log Returns**
+
+Use the calibrated model to simulate correlated log-returns:
+
+```python
+log_returns = model.simulate_correlated_logreturns(
+    time_steps=252,
+    n_sims=10000
+)
+```
+
+For univariate simulation:
+```python
+log_returns = model.simulate_logreturns(
+    time_steps=252,
+    n_sims=10000
+)
+```
+
+---
+
+### 3. **Convert to Price Paths**
+
+Convert simulated log-returns to asset price paths:
+
+```python
+from src.simulate import build_prices
+
+initial_prices = [100, 100, 100]
+prices = build_prices(initial_prices, log_returns)
+```
+
+---
+
+### 4. **Plot Simulated Paths**
+
+Visualize the output using the built-in plotter:
+
+```python
+from src.simulate import plot_log_returns
+
+plot_log_returns(log_returns, n_plot=20)
+```
+
+---
+
+### 5. **Simulate with Stochastic Volatility (GARCH)**
+
+To simulate log-returns using a DCC-GARCH(1,1) model for time-varying volatility:
+
+```python
+log_return_data = ...  # pd.DataFrame with historical log-returns
+
+log_returns_garch = model.simulate_logreturns_with_garch_vol(
+    log_return_data=log_return_data,
+    time_steps=252,
+    n_sims=1000
+)
+```
+
+This will simulate paths where both volatility and correlation evolve over time.
 
 ---
 
