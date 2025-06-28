@@ -41,13 +41,13 @@ Welcome! This project is my own lightweight attempt at an **Economic Scenario Ge
 
 ```
 ESG/
---- src/                               # Simulation engine
------- simulate.py                    # Main logic
---- test/
-------_run_correlated_simulation.py  # Validation against real data
---- data/
------- prices-split-adjusted.csv      # Input data (from Kaggle)
---- README.md                          # You're here
+|- src/                               # Simulation engine
+|-- simulate.py                    # Main logic
+|- test/
+|-- _run_correlated_simulation.py  # Validation against real data
+|- data/
+|-- prices-split-adjusted.csv      # Input data (from Kaggle)
+|- README.md                          # You're here
 ```
 
 ---
@@ -94,9 +94,9 @@ Simulated correlation matrix:
  [[1.         0.32109635 0.41362734]
  [0.32109635 1.         0.36600567]
  [0.41362734 0.36600567 1.        ]]
-
-These results show that the simulation accurately replicates the underlying statistical structure of the historical data.
 ```
+These results show that the simulation accurately replicates the underlying statistical structure of the historical data.
+
 
 ![picture of correlation](images/pic2.png)
 
@@ -109,7 +109,6 @@ Here are some ideas for what’s next:
 * [ ] Rewrite in OOP format
 * [ ] Add support for dividends (currently only modelling price return)
 * [ ] Add stochastic volatility
-* [ ] Incorporate jumps (Merton or Kou)
 * [ ] Extend/fix `get_ticker_data()` 
 * [ ] Wrap simulations into a small web app for live demo or API
 

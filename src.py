@@ -9,7 +9,6 @@ import numpy as np
 import yfinance as yf
 import matplotlib.pyplot as plt
 import seaborn as sns
-import openpyxl as xl
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
@@ -20,14 +19,6 @@ class GeometricBrownianMotion:
         self.sigma = sigma
         self.corr_mat = corr_mat
         self.dt = dt
-        
-    def __str__(self):
-        return (f"Geometric Brownian Motion:\n"
-                f"mu: {self.mu}\n"
-                f"sigma: {self.sigma}\n"
-                f"dt: {self.dt}\n"
-                "corr_mat:\n"
-                f"{self.corr_mat}")
     
     def __repr__(self):
         return (f"Geometric Brownian Motion:\n"
@@ -79,11 +70,46 @@ class GeometricBrownianMotion:
             )
         return log_returns
     
+    def plot_example(self):
+        """
+        Plots 10 sample paths of the calibrated model with time horison of 5 years - 5*(1/dt),
+        """
+        time_steps = int(1/(self.dt)*5)
+        if len(self.mu) == 1:
+            log_returns = self.simulate_logreturns(time_steps, 10)
+        else:
+            log_returns = self.simulate_correlated_logreturns(time_steps, 10)
+        
+        plot_log_returns(log_returns)
+        
+    
     def calibrate(self, tickers, start_date, end_date, frequency):
         """
-        Download Close prices, compute mu, sigma (sample std ddof=1) 
-        and correlation matrix.
-        Currently not working as desired.
+        DOES NOT WORK!
+        Calibrates the Geometric Brownian Motion (GBM) parameters to historical market data.
+    
+        This method downloads close prices for the given tickers from Yahoo Finance,
+        computes historical log-returns, and estimates the following parameters:
+        
+        - μ (mu): annualised drift for each asset
+        - σ (sigma): annualised volatility for each asset
+        - ρ (corr_mat): empirical correlation matrix between asset returns
+        - Δt (dt): time step size, based on data frequency
+    
+        Parameters
+        ----------
+        tickers : list[str] or str
+            A list of ticker symbols (e.g. ['AAPL', 'GOOG']) or a single ticker as a string.
+        
+        start_date : str
+            Start date for the historical time series (format: 'YYYY-MM-DD').
+        
+        end_date : str
+            End date for the historical time series (format: 'YYYY-MM-DD').
+    
+        frequency : str
+            Frequency of data ('1d' = daily, '1mo' = monthly, '1y' = yearly). 
+            Used to determine Δt and to set the appropriate Yahoo Finance interval.
         """
         df = yf.download(
             tickers=tickers,
@@ -169,19 +195,19 @@ def build_prices(S0, log_returns):
         prices[:, t, :] = prices[:, t - 1, :] * np.exp(log_returns[:, t - 1, :])
     return prices
 
-def plot_returns(log_returns, n_plot=10, palette_name="Set2"):
+def plot_log_returns(log_returns, n_plot=10, palette_name="Set2"):
     """
     Plot simulated price paths and the mean price path per asset with colors from Seaborn palette.
 
     Parameters:
     - log_returns: np.array of shape (n_assets, time_steps, n_sims)
     - n_plot: number of sample paths per asset to plot
-    - palette_name: name of Seaborn color palette (default: "tab10")
+    - palette_name: name of Seaborn color palette (default: "Set2")
     """
     log_returns = np.asarray(log_returns)
 
     if log_returns.ndim == 2:
-        log_returns = log_returns[np.newaxis, :, :]  # promote 2D to 3D
+        log_returns = log_returns[np.newaxis, :, :]  # 2D to 3D
 
     n_asset, time_steps, n_sims = log_returns.shape
     prices = build_prices(100 * np.ones(n_asset), log_returns)
