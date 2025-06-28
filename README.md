@@ -101,7 +101,7 @@ These results show that the simulation accurately replicates the underlying stat
 
 ---
 
-## ?? Usage Guide
+## Usage Guide
 
 Below is a quick guide on how to calibrate and run simulations using this ESG engine.
 
